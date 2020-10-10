@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<request>
+<inn>510005032</inn>
+<doc_date>20120124</doc_date>
+<bank_branch_operator>Файзиева М.</bank_branch_operator>
+<account account_currency = "TJS">20202972500030000023</account>
+<account account_currency = "TJS">20202972900030000005</account>
+<account account_currency = "TJS">20202972000000000032</account>
+<account account_currency = "TJS">20202972700030000027</account>
+</request>

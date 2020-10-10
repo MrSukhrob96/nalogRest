@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="./assets/50 x 49 - PNG.png" type="image/icon type">
+    <link rel="stylesheet" href="./assets/bootstrap.min.css"/>
+    <script type="text/javascript" src="./assets/vue.js"></script>
+
+
+    <title>Создать счёта</title>
+</head>
+
+<body>
+
+	<style type="text/css">
+		.nav-link{
+			font-weight: 700;
+		}
+		.active{
+			color: #28a745 !important;
+		}
+	</style>
+
+    <!-------------------------- header section start -------------------------->
+	    <header class="header" style="background: #eeeeee">
+	        <div class="container">
+	            <nav class="navbar navbar-expand-sm navbar-light">
+	                <a href="index.html" class="navbar-brand">
+	                   <img src="./assets/50 x 49 - PNG.png" alt="">
+	                </a>
+	                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+	                    <ul class="navbar-nav ml-auto">
+	                        <li class="nav-item">
+	                            <a href="index2.html" class="nav-link active">Создать счёта</a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="close2.html" class="nav-link">Закрыть счёта </a>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </nav>
+	        </div>
+	    </header>
+    <div class="container" id="app">
+
+    	<template>
+			<center><h1 class="mt-5 font-weight-bold active" style=" display: inline-block; border-bottom: 3px solid #28a745; padding-bottom: 3px;">Закрыть счёта</h1></center>
+
+    		<form class="mt-5">
+	            <div class="form-row">
+	                <div class="form-group col-10">
+	                  <label for="inputEmail4" class="active font-weight-bold">Введите ИНН</label>
+	                  <input type="text" class="form-control" id="inputEmail4" v-model="formData.inn">
+	                </div>
+	                <div class="form-group col-2">
+	                	<label for="inputEmail4" class="active mt-5">  </label>
+	                  <button type="submit" class="btn btn-success ml-auto font-weight-bold" @click.prevent="innBtnHandler">Проверить</button>
+	                <div>
+	            </div>
+	        </form>
+		</template>
+
+    </div>
+</body>
+</html>

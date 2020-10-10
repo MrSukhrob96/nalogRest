@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="./assets/50 x 49 - PNG.png" type="image/icon type">
+    <link rel="stylesheet" href="./assets/bootstrap.min.css"/>
+    <script type="text/javascript" src="./assets/vue.js"></script>
+
+
+    <title>Создать счёта</title>
+</head>
+
+<body>
+
+	<style type="text/css">
+		.nav-link{
+			font-weight: 700;
+		}
+		.active{
+			color: #28a745 !important;
+		}
+	</style>
+
+    <!-------------------------- header section start -------------------------->
+	    <header class="header" style="background: #eeeeee">
+	        <div class="container">
+	            <nav class="navbar navbar-expand-sm navbar-light">
+	                <a href="index.html" class="navbar-brand">
+	                   <img src="./assets/50 x 49 - PNG.png" alt="">
+	                </a>
+	                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+	                    <ul class="navbar-nav ml-auto">
+	                        <li class="nav-item">
+	                            <a href="index.html" class="nav-link active">Создать счёта</a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="close.html" class="nav-link">Закрыть счёта </a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="#persionalty" class="nav-link"></a>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </nav>
+	        </div>
+	    </header>
+    <div class="container" id="app">
+
+    	<template v-if="issetInn !== true">
+    		
+    		<center><h1 class="mt-5 font-weight-bold active" style=" display: inline-block; border-bottom: 3px solid #28a745; padding-bottom: 3px;">Создать счёта</h1></center>
+
+    		<form class="mt-5">
+	            <div class="form-row">
+	                <div class="form-group col-10">
+	                  <label for="inputEmail4" class="active font-weight-bold">Введите ИНН</label>
+	                  <input type="text" class="form-control" id="inputEmail4" v-model="formData.inn">
+	                </div>
+	                <div class="form-group col-2">
+	                	<label for="inputEmail4" class="active mt-5">  </label>
+	                  <button type="submit" class="btn btn-success ml-auto font-weight-bold" @click.prevent="innBtnHandler">Проверить</button>
+	                <div>
+	            </div>
+	        </form>
+    	</template>
+		<template v-if="issetInn !== false">
+	        <form class="mt-5">
+	            <div class="form-row mt-5">
+	            	<div class="form-group col-12">
+	                  <label for="inputEmail4" class="active font-weight-bold">Ф.И.О директора филиала,в котором открыт счёт</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.name">
+	                </div>
+	                <div class="form-group col-12">
+	                  <label for="inputEmail4" class="active font-weight-bold">Ф.И.О оператора филиала,в котором открыт счёт</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.bank_branch_operator">
+	                </div>
+	                <div class="form-group col-md-3">
+	                  <label for="inputEmail4" class="active font-weight-bold">ИНН</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.inn">
+	                </div>
+	                <div class="form-group col-md-3">
+	                  <label for="inputEmail4" class="active font-weight-bold">ЕНН</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.bank_branch_inn" >
+	                </div>
+	                <div class="form-group col-md-3">
+	                  <label for="inputEmail4" class="active font-weight-bold">Дата (ГГГГММДД)</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.doc_date">
+	                </div>
+	                <div class="form-group col-md-3">
+	                  <label for="inputEmail4" class="active font-weight-bold">Код авторизации</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.authCode">
+	                </div>
+	                <div class="form-group col-md-4">
+	                  <label for="inputEmail4" class="active font-weight-bold">Ф.И.О оператора филиала</label>
+	                  <input type="text" class="form-control" id="inputEmail4" value="">
+	                </div>
+	                <div class="form-group col-md-4">
+	                  <label for="inputEmail4" class="active font-weight-bold">Ф.И.О директора филиала</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.bank_branch_director">
+	                </div>
+	                <div class="form-group col-md-4">
+	                  <label for="inputEmail4" class="active font-weight-bold">№ документа</label>
+	                  <input type="text" class="form-control" id="inputEmail4" :value="formData.doc_num">
+	                </div>
+	               <template v-for="(key, value) in formData.currency">
+	               		<div class="form-group col-md-3">
+		                    <label for="inputEmail4" class="active font-weight-bold">Счёт {{ key.curr }} </label>
+		                    <input type="text" class="form-control" id="inputEmail4" :value="key.acct">
+		                </div>  
+	               </template> 
+	            </div>
+	            <div class="form-row">
+	              <button type="submit" class="btn btn-success ml-auto font-weight-bold">Создать счёта</button>
+	            </div>
+	        </form>
+	    </template>
+
+    </div>
+
+    <script>
+        new Vue({
+          el: '#app',
+          data: {
+          	successs: false,
+          	issetInn: false,     
+            formData: {
+            	bank_branch_inn: '',
+            	name: '',
+            	inn: '',
+            	doc_date: '1',
+            	bank_branch_operator: '',
+            	currency: [],
+            	authCode: '',
+            	doc_num:'',
+            	bank_branch_director: '',
+            },
+        },
+          methods: {
+          	innBtnHandler: function()
+          	{
+				fetch('php/main.php', {
+					method: 'POST',
+					headers: {
+					   'Content-Type': 'application/json',
+					},
+				  	body: JSON.stringify({
+				  		inn: this.formData.inn,
+				  		postKey: 3
+				  	}),
+				})
+				.then(response => response.json())
+					.then(data => {
+
+						if(!Array.isArray(data)){
+							console.log(data);
+							return;
+						}
+
+						console.log(data)
+
+						  data.forEach((item)=>{
+						  	if(item.doc_date){
+					      		this.formData.doc_date = item.doc_date
+					     	 }
+					     	if(item.bank_branch_operator){
+					      		this.formData.bank_branch_operator = item.bank_branch_operator
+					     	 }
+
+
+					     	 const accounts = item.account ? item.account : item.currency;
+
+					     	 if(accounts){
+					     	 	const c = accounts.slice(5, 8);
+					     	 	let curr = '';
+
+					     	 	if (c == 972) {
+									curr = 'TJS';
+					     	 	} else if(c == 810){
+									curr = 'RUB';
+					     	 	} else if(c == 840){
+									curr = 'USD';
+					     	 	} else if(c == 978){
+					     	 		curr = 'EUR';
+					     	 	}
+
+					     	 	this.formData.currency.push({ curr: curr, acct: accounts});
+					     	 }
+					     	if(item.bank_branch_inn){
+					      		this.formData.bank_branch_inn = item.bank_branch_inn
+					     	}
+
+					     	if(item.name){
+					      		this.formData.name = item.name
+					     	 }
+
+					     	 if(item.authCode){
+					     	 	this.formData.authCode = item.authCode;
+					     	 }
+
+					     	 this.successs = true;
+					      })
+					        if (this.formData.inn !== '')
+			          		{
+			          			this.issetInn = true;
+			          		}
+					})
+					.catch((error) => {
+						  this.formData.inn = '';
+						  this.issetInn = false;
+						  console.log(error);
+					});
+          	},
+          }
+        })
+    </script>
+
+</body>
+
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="icon" href="./assets/50 x 49 - PNG.png" type="image/icon type">
+    <link rel="stylesheet" href="./assets/bootstrap.min.css"/>
+    <script type="text/javascript" src="./assets/vue.js"></script>
+
+
+    <title>Создать счёта</title>
+</head>
+
+<body>
+
+	<style type="text/css">
+		.nav-link{
+			font-weight: 700;
+		}
+		.active{
+			color: #28a745 !important;
+		}
+	</style>
+
+    <!-------------------------- header section start -------------------------->
+	    <header class="header" style="background: #eeeeee">
+	        <div class="container">
+	            <nav class="navbar navbar-expand-sm navbar-light">
+	                <a href="index.html" class="navbar-brand">
+	                   <img src="./assets/50 x 49 - PNG.png" alt="">
+	                </a>
+	                <div class="collapse navbar-collapse" id="collapsibleNavbar">
+	                    <ul class="navbar-nav ml-auto">
+	                        <li class="nav-item">
+	                            <a href="index2.html" class="nav-link">Создать счёта</a>
+	                        </li>
+	                        <li class="nav-item">
+	                            <a href="close2.html" class="nav-link active">Закрыть счёта </a>
+	                        </li>
+	                    </ul>
+	                </div>
+	            </nav>
+	        </div>
+	    </header>
+
+    <div class="container" id="app">
+
+		<template v-if="issetInn !== true && closedResult !== true && snipper !== true">	
+			<div class="container">
+				<center><h1 class="mt-5 font-weight-bold active" style=" display: inline-block; border-bottom: 3px solid #28a745; padding-bottom: 3px;">Закрыть счёта</h1></center>
+	    		<form class="mt-5">
+		            <div class="form-row">
+		                <div class="form-group col-10">
+		                  <label for="inputEmail4" class="active font-weight-bold">Введите ИНН</label>
+		                  <input type="text" class="form-control" id="inputEmail4" v-model="formData.inn">
+		                </div>
+		                <div class="form-group col-2">
+		                	<label for="inputEmail4" class="active mt-5">  </label>
+		                  <button type="submit" class="btn btn-success ml-auto font-weight-bold" @click.prevent="innBtnHandler">Проверить</button>
+		                <div>
+		            </div>
+		        </form>
+			</div>
+		</template>
+
+		<template v-if="issetInn !== false && closedResult !== true && snipper !== true">
+			<div class="container">
+		        <form class="mt-5">
+		            <div class="form-row">
+		                <div class="form-group col-12">
+		                  <label for="inputEmail4" class="active font-weight-bold">ФИО / наинование организации</label>
+		                  <input type="text" class="form-control" id="inputEmail4" :value="formData.name">
+		                </div>
+		                <div class="form-group col-md-3">
+		                  <label for="inputEmail4" class="active font-weight-bold">ИНН</label>
+		                  <input type="text" class="form-control" id="inputEmail4" :value="formData.inn">
+		                </div>
+		                <div class="form-group col-md-3">
+		                  <label for="inputEmail4" class="active font-weight-bold">ЕНН</label>
+		                  <input type="text" class="form-control" id="inputEmail4" :value="formData.bank_branch_inn">
+		                </div>
+		                <div class="form-group col-md-3">
+		                  <label for="inputEmail4" class="active font-weight-bold">Дата закрыта (ГГГГММДД)</label>
+		                  <input type="text" class="form-control" id="inputEmail4" :value="formData.dereg_date">
+		                </div>
+		                <div class="form-group col-md-3">
+		                    <label for="inputEmail4" class="active font-weight-bold">Оператор отделения банка</label>
+		                    <input type="text" class="form-control" id="inputEmail4" :value="formData.bank_branch_operator">
+		                </div>
+		                <div class="form-group col-md-12">
+		                  <label for="inputEmail4" class="active font-weight-bold">Причина отмены регистрации</label>
+		                  <select class="form-control" id="inputEmail4" :value="formData.dereg_reason_id">
+		                  	<template v-for="(dataOption, k) in dereg_reasons">
+		                  		<option :value="k"> {{ dataOption }}</option>
+		                  	</template>
+		                      
+		                  </select>
+		                </div> 
+		               <template v-for="(key, value) in formData.accounts">
+		               		<div class="form-group col-md-3">
+			                    <label for="inputEmail4" class="active font-weight-bold">Счёт {{ key.account_currency }} </label>
+			                    <input type="text" class="form-control" id="inputEmail4" :value="key.account_num">
+			                </div>  
+		               </template>            
+		            </div>
+		            <div class="form-row">
+		              <button type="submit" class="btn btn-success ml-auto font-weight-bold" @click.prevent="closeAcctBtnHandler">Закрыть счёта</button>
+		            </div>
+		        </form>
+		    </div>
+        </template>
+
+        <template v-if="closedResult !== false && snipper !== true">
+         	<div class="container">
+	         	<div class="v-modal mt-5">
+				  <div class="modal-dialog">
+				    <div class="modal-content">
+				      <div class="modal-header">
+				        <h5 class="modal-title active">Резултать</h5>
+				        <button type="button" class="close"  @click="closeModal">
+				          <span aria-hidden="true" class="active">&times;</span>
+				        </button>
+				      </div>
+				      <div class="modal-body" v-if="errorWithFile !== true && errorWithNalog !== true">
+				       		<ul>
+				       			<li v-for="results in resultCloseData">
+				       				<p class="nav-item">
+				       					ID: {{ results.id }} Счёт: {{ results.account_num }} Дата {{ results.dereg_date }}
+				       				</p>
+				       			</li>
+				       		</ul>
+				      </div>
+
+				      <div class="modal-body"  v-if="errorWithFile !== true && errorWithNalog !== false">
+							<h5 class="active"> Ошибка подключение с сервер Налогом </h5>
+				      </div>
+
+				      <div class="modal-body"  v-if="errorWithFile !== false && errorWithNalog !== true">
+							<h2 class="active"> Файл не найден</h2>
+				      </div>
+
+				      <div class="modal-footer">
+				        <button type="button" class="btn btn-success" data-dismiss="modal" @click="closeModal">Закрыть</button>
+				      </div>
+				    </div>
+				  </div>
+				</div>
+			</div>
+	    </template>
+
+	    <template v-if="snipper">
+		    <div class="container">
+		    	<div class="text-center text-success mt-5" style="transform: translateY(50%);">
+				  <div class="spinner-border" role="status">
+				    <span class="sr-only">Loading...</span>
+				  </div>
+				</div>
+		    </div>
+        </template>
+
+    </div>
+
+    <script>
+
+		new Vue({
+	          el: '#app',
+	          data: {
+	          	issetInn: false,
+	          	snipper: false, 
+	          	closedResult: false,
+	          	errorWithFile: false,
+	          	errorWithNalog: false,
+	            formData: {
+	            	name: '',
+			    	inn: '',
+					bank_branch_inn: '',
+					dereg_date: '',
+					dereg_reason_id: '',
+					dereg_reason_desc: '',
+					bank_branch_operator: '',
+					accounts: [],   	
+	            },
+	            dereg_reasons:[
+	            	" ",
+	            	"На основании заявления владельца банковского счета в порядке и в сроки, определяемые договором банковского счета и/или договором банковского вклада",
+	            	"По решению органа, создавшего предприятие, объединение, организацию или учреждение либо органа обладающего таким правом ",
+	            	"При расторжении договора банковского счета",
+	            	"По требованию уполномоченной кредитной финансовой организации Республики Таджикистан в случае, когда сумма денежных средств в банковском счете или банковского вклада не превышает предусмотренный минимальный размер, указанный в заключенном договоре",
+	            	"В иных случаях предусмотренных действующим законодательством",
+	            ],
+	            resultCloseData: [],
+	        },
+	        methods: {
+	        	innBtnHandler()
+	        	{
+					fetch('php/main.php', {
+						method: 'POST',
+						headers: {
+						   'Content-Type': 'application/json',
+						},
+					  	body: JSON.stringify({
+					  		inn: this.formData.inn,
+					  		postKey: 1
+					  	}),
+					}).then(response => response.json()) .then(data => {
+
+						if (data == 'NO1'){ 
+							this.closedResult = true; this.errorWithNalog = true; 
+							return;
+							console.log(1)
+						}
+						if (data == 'NO2'){ 
+							console.log(2)
+							this.closedResult = true; this.errorWithFile = true; 
+							return;
+						}
+
+						console.log(data)
+
+						data.forEach((item)=>{
+
+						  	if (item.doc_date){ this.formData.dereg_date = item.doc_date }
+
+					     	if (item.bank_branch_operator){ this.formData.bank_branch_operator = item.bank_branch_operator }
+					     	
+					     	if (item.accounts)
+					     	{
+					     	 	const c = item.accounts.slice(5, 8);
+					     	 	let account_currency = '';
+
+					     	 	if (c == 972) { account_currency = 'TJS'; } 
+					     	 	if (c == 810) { account_currency = 'RUB'; }
+					     	 	if (c == 840) { account_currency = 'USD'; }
+					     	 	if (c == 978) { account_currency = 'EUR'; }
+
+					     	 	this.formData.accounts.push({ 'account_currency': account_currency, 'account_num': item.accounts});
+					     	}
+
+					     	if (item.bank_branch_inn) { this.formData.bank_branch_inn = item.bank_branch_inn }
+
+					     	if (item.name) { this.formData.name = item.name }
+
+					      })
+
+							if (this.formData.inn !== '') { this.issetInn = true; }
+					})
+			    	.catch(error => {
+						  this.formData.inn = '';
+						  this.issetInn = false;
+						  console.log(error)
+					})
+	        	},
+
+	        	closeAcctBtnHandler()
+	        	{
+	        		
+	        		this.snipper=true;										  
+		          	setTimeout(()=>{ this.snipper=false; }, 3000);
+
+					fetch('php/main.php', {
+						method: 'POST',
+						headers: {
+						   'Content-Type': 'application/json',
+						},
+					  	body: JSON.stringify({
+					  		inn: this.formData.inn,
+					  		bank_branch_inn: this.formData.bank_branch_inn,
+					  		dereg_date: this.formData.dereg_date,
+					  		dereg_reason_id: this.dereg_reason_id,
+					  		dereg_reason_desc: this.formData.dereg_reason_desc,
+					  		bank_branch_operator: this.formData.bank_branch_operator,
+					  		accounts: this.formData.accounts,
+					  		postKey: 2
+					  	}),
+					}).then(response => response.json()) .then(data => {
+
+
+					})
+			    	.catch(error => {
+
+					})
+	        	},
+	        	closeModal(){
+	        		// this.closedResult: false;
+		         //  	this.errorWithFile: false;
+		         //  	this.errorWithNalog: false;
+		         //  	this.issetInn = false;
+	        	},
+	        }
+        });
+
+    </script>
+</body>
+</html>
