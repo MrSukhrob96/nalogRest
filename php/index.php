@@ -64,8 +64,8 @@
 
     function prepareUrl($xml)
     {
-        $sign = SHA1(MD5($xml)."cb7b01a7c198234a66a2dcfc6d17d9284a95f0dca513bb04a33a1f6651bbed1e");
-        $url = "http://10.50.63.196:888/eSERVICE.aspx?username=510022365&sign=".$sign."";
+        $sign = SHA1(MD5($xml)."3452435345345345");
+        $url = "http://345345345345:888/eSERVICE.aspx?username=34534534534&sign=".$sign."";
         return $url;
     }
 
